@@ -23,6 +23,18 @@ def join(channel):
     return ''
 
 
+@app.route('/join/batch')
+def join_batch():
+    for channel in request.args:
+        if channel not in threads or not threads[channel].is_alive():
+            t = threading.Thread(target=Channel, args=(channel, redis_connection))
+            threads[channel] = t
+            threads[channel].start()
+            redis_connection.hset('channels', channel, 1)
+            print(f'JOIN >> {channel}')
+    return ''
+
+
 @app.route('/part/<channel>', methods=['GET'])
 def part(channel):
     redis_connection.hset('channels', channel, 0)
@@ -46,8 +58,7 @@ def delete_all():
 
 @app.route('/top/<limit>')
 def top(limit):
-    for channel in top_channels(limit):
-        requests.get(f'http://127.0.0.1:5000/join/{channel}')
+    requests.get(f'http://127.0.0.1:5000/join/batch?{''.join([f'{n}=_&' for n in top_channels(10)])}')
     return ''
 
 
