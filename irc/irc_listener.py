@@ -5,7 +5,7 @@ import redis
 from irc.message import Message
 
 
-class Channel:
+class IRCListener:
     def __init__(self, channel, redis_connection):
         self.host = "irc.twitch.tv"
         self.port = int(os.environ['PORT'])

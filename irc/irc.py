@@ -1,8 +1,7 @@
 from flask import Blueprint
 from cache import redis_connection
-from tasks.celery_tasks import join, threads
-from irc.channel import Channel
-from top_channels.top_channels import top_channels
+from app.celery_tasks import join, threads
+from .top_channels import top_channels
 
 
 irc_routes = Blueprint('irc_routes', __name__)
@@ -30,7 +29,6 @@ def delete_all():
 
 @irc_routes.route('/top/<limit>')
 def top(limit):
-    import ipdb; ipdb.set_trace()
     for channel in top_channels(limit):
         result = join.delay(channel)
         result.wait()
