@@ -10,6 +10,7 @@ flask = "*"
 redis = "*"
 requests = "*"
 python-dotenv = "*"
+celery = "*"
 
 [requires]
 python_version = "3.7"
