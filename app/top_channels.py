@@ -2,6 +2,7 @@ import os
 import json
 import requests
 
+
 def top_channels(limit=50):
     headers = {
         'Accept': 'application/vnd.twitchtv.v5+json',
@@ -11,4 +12,4 @@ def top_channels(limit=50):
     response = requests.get(f'https://api.twitch.tv/kraken/streams?limit={limit}', headers=headers)
     data = json.loads(response.text).get('streams', [])
 
-    return [n['channel']['name'] for n in data]
+    return set([n['channel']['name'] for n in data])

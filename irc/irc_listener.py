@@ -6,14 +6,14 @@ from irc.message import Message
 
 
 class IRCListener:
-    def __init__(self, channel, redis_connection):
+    def __init__(self, channel, redis_client):
         self.host = "irc.twitch.tv"
         self.port = int(os.environ['PORT'])
         self.irc_channel = f'#{channel}'
         self.channel = channel
         self.nickname = os.environ['NICKNAME']
         self.oauth = os.environ['OAUTH']
-        self.redis_connection = redis_connection
+        self.redis_client = redis_client
         self.socket_connection = socket.socket()
 
         self.run()
@@ -29,7 +29,7 @@ class IRCListener:
 
     def run(self):
         self.__connect()
-        while self.redis_connection.hget('channels', self.channel).decode('utf-8') == '1':
+        while self.redis_client.hget('channels', self.channel) == b'1':
             try:
                 
                 data = self.socket_connection.recv(2056).decode('utf-8')
