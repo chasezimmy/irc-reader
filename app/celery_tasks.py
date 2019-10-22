@@ -1,11 +1,9 @@
-import sys
-sys.path.append('..')
-
 import threading
 from flask import current_app
 from irc.irc_listener import IRCListener
 from cache import redis_connection
 from . import celery
+
 
 threads = {}
 
@@ -17,3 +15,5 @@ def join(channel):
         threads[channel].start()
         redis_connection.hset('channels', channel, 1)
         return f'JOIN >> {channel}'
+
+

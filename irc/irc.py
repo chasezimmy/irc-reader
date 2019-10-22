@@ -1,5 +1,5 @@
 from flask import Blueprint
-#from cache import redis_connection
+from cache import redis_connection
 
 
 irc_routes = Blueprint('irc_routes', __name__)
