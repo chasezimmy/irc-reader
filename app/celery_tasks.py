@@ -1,3 +1,6 @@
+import sys
+sys.path.append('..')
+
 import threading
 from flask import current_app
 from irc.irc_listener import IRCListener

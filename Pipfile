@@ -12,6 +12,8 @@ requests = "*"
 python-dotenv = "*"
 celery = "*"
 flask-script = "*"
+ipdb = "*"
+apscheduler = "*"
 
 [requires]
 python_version = "3.7"

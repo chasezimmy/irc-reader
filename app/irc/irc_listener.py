@@ -29,7 +29,7 @@ class IRCListener:
 
     def run(self):
         self.__connect()
-        while self.redis_connection.hget('channels', self.channel).decode('utf-8') == '1':
+        while self.redis_connection.hget('channels', self.channel) == b'1':
             try:
                 
                 data = self.socket_connection.recv(2056).decode('utf-8')
