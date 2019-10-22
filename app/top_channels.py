@@ -2,6 +2,7 @@ import os
 import json
 import requests
 
+
 def top_channels(limit=50):
     headers = {
         'Accept': 'application/vnd.twitchtv.v5+json',

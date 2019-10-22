@@ -1,12 +1,13 @@
-from flask import Flask
+import threading
+from flask import Flask, current_app
 from celery import Celery
 from config import Config
-from apscheduler.schedulers.background import BackgroundScheduler
+from redis_client import redis_client
 from irc.irc import irc_routes
-from .scheduled_tasks import refresh_top_channels
-
+from irc.irc_listener import IRCListener
 
 celery = Celery(__name__, broker=Config.CELERY_BROKER_URL)
+threads = {}
 
 def create_app():
 
@@ -15,8 +16,19 @@ def create_app():
     app.register_blueprint(irc_routes)
     app.config.from_object(Config)
     celery.conf.update(app.config)
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(refresh_top_channels, trigger='interval', seconds=5)
-    scheduler.start()
+
 
     return app
+
+
+@celery.task(name='join')
+def join(channel):
+    if channel not in threads or not threads[channel].is_alive():
+        t = threading.Thread(target=IRCListener, args=(channel, redis_client))
+        threads[channel] = t
+        threads[channel].start()
+        redis_client.hset('channels', channel, 1)
+        return f'JOIN >> {channel}'
+
+
+
