@@ -1,8 +1,9 @@
 import os
 import re
+import json
 import socket
 import redis
-from irc.message import Message
+from irc.message import extract_message
 
 
 class IRCListener:
@@ -45,8 +46,10 @@ class IRCListener:
                             self.socket_connection.send(bytes('PONG %s\r\n' % line[1], 'utf-8'))
                         
                         if line[1] == 'PRIVMSG':
-                            message = Message(line)
-                            print(f'{message.channel}: {message.message}')
+                            message = extract_message(line)
+                            if message:
+                                self.redis_client.rpush('5_min', json.dumps(message))
+                            #print(f'{message}')
 
             except socket.error:
                 print("Socket died")
