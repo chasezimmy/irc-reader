@@ -53,6 +53,7 @@ class IRCListener:
                                 self.redis_client.rpush('30_min', dump)
                                 self.redis_client.rpush('1_hour', dump)
 
+
             except socket.error:
                 print("Socket died")
 

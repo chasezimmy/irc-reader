@@ -8,7 +8,6 @@ from irc.irc_listener import IRCListener
 from data import data_routes
 
 celery = Celery(__name__, broker=Config.CELERY_BROKER_URL)
-threads = {}
 
 def create_app():
 
