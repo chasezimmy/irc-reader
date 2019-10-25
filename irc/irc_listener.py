@@ -49,6 +49,7 @@ class IRCListener:
                             message = extract_message(line)
                             if message:
                                 self.redis_client.rpush('5_min', json.dumps(message))
+                                self.redis_client.rpush('30_min', json.dumps(message))
                             #print(f'{message}')
 
             except socket.error:

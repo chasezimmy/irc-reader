@@ -35,7 +35,6 @@ def join_channel():
 
 def remove_5_min():
     spams = [json.loads(n.decode()) for n in redis_client.lrange('5_min', 0, -1)]
-    print("Remove 5 minute old spam")
     expired_count = 0
     FIVE_MINUTES = 300
 
@@ -44,5 +43,19 @@ def remove_5_min():
         if time.time() - int(n['time']) >= FIVE_MINUTES:
             expired_count += 1
             redis_client.lset('5_min', i, '_______')
-    print("REMOVED: ", expired_count)
+    print("REMOVED 5_min: ", expired_count)
     redis_client.lrem('5_min', expired_count, '_______')
+
+
+def remove_30_min():
+    spams = [json.loads(n.decode()) for n in redis_client.lrange('30_min', 0, -1)]
+    expired_count = 0
+    FIVE_MINUTES = 60*30
+
+    for i, n in enumerate(spams):
+        
+        if time.time() - int(n['time']) >= FIVE_MINUTES:
+            expired_count += 1
+            redis_client.lset('30_min', i, '_______')
+    print("REMOVED 30_min: ", expired_count)
+    redis_client.lrem('30_min', expired_count, '_______')

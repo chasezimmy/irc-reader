@@ -25,9 +25,13 @@ def create_app():
 
 @celery.task(name='join')
 def join(channel):
-    if channel not in threads or not threads[channel].is_alive():
-        t = threading.Thread(target=IRCListener, args=(channel, redis_client))
-        threads[channel] = t
-        threads[channel].start()
-        redis_client.hset('channels', channel, 1)
-        return f'JOIN >> {channel}'
+    redis_client.hset('channels', channel, 1)
+    IRCListener(channel, redis_client)
+    return f'JOIN >> {channel}'
+    """
+    t = threading.Thread(target=IRCListener, args=(channel, redis_client))
+    threads[channel] = t
+    threads[channel].start()
+    redis_client.hset('channels', channel, 1)
+    return f'JOIN >> {channel}'
+    """
