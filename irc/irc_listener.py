@@ -1,8 +1,9 @@
 import os
 import re
+import json
 import socket
 import redis
-from irc.message import Message
+from irc.message import extract_message
 
 
 class IRCListener:
@@ -32,7 +33,7 @@ class IRCListener:
         while self.redis_client.hget('channels', self.channel) == b'1':
             try:
                 
-                data = self.socket_connection.recv(2056).decode('utf-8')
+                data = self.socket_connection.recv(2056).decode('utf-8', 'replace')
                 data_split = re.split(r"[~\r\n]+", data)
                 data = data_split.pop()
                 
@@ -45,8 +46,12 @@ class IRCListener:
                             self.socket_connection.send(bytes('PONG %s\r\n' % line[1], 'utf-8'))
                         
                         if line[1] == 'PRIVMSG':
-                            message = Message(line)
-                            print(f'{message.channel}: {message.message}')
+                            message = extract_message(line)
+                            if message:
+                                dump = json.dumps(message)
+                                self.redis_client.rpush('5_min', dump)
+                                self.redis_client.rpush('30_min', dump)
+                                self.redis_client.rpush('1_hour', dump)
 
             except socket.error:
                 print("Socket died")
