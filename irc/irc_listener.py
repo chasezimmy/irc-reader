@@ -48,9 +48,10 @@ class IRCListener:
                         if line[1] == 'PRIVMSG':
                             message = extract_message(line)
                             if message:
-                                self.redis_client.rpush('5_min', json.dumps(message))
-                                self.redis_client.rpush('30_min', json.dumps(message))
-                            #print(f'{message}')
+                                dump = json.dumps(message)
+                                self.redis_client.rpush('5_min', dump)
+                                self.redis_client.rpush('30_min', dump)
+                                self.redis_client.rpush('1_hour', dump)
 
             except socket.error:
                 print("Socket died")

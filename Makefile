@@ -7,3 +7,5 @@ add_moonmoon:
 tasks:
 	ulimit -n 10000 && celery -A celery_worker.celery worker --loglevel=info --autoscale=1,100
 	
+kill:
+	pkill -f "celery worker"
