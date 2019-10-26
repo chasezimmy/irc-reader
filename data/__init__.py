@@ -28,3 +28,19 @@ def trending(list):
         counter.append(f'{n}')
 
     return jsonify(counter)
+
+
+@data_routes.route('/trending/channel/<list>', methods=['GET'])
+def trending_channel(list):
+
+    spams = [json.loads(n.decode())['channel'] for n in r.lrange(list, 0, -1)]
+
+    trending = {}
+
+    for spam in spams:
+        if spam not in trending:
+            trending[spam] = 0
+
+        trending[spam] += 1
+
+    return jsonify(trending)

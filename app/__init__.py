@@ -27,11 +27,4 @@ def create_app():
 def join(channel):
     redis_client.hset('channels', channel, 1)
     IRCListener(channel, redis_client)
-    return f'JOIN >> {channel}'
-    """
-    t = threading.Thread(target=IRCListener, args=(channel, redis_client))
-    threads[channel] = t
-    threads[channel].start()
-    redis_client.hset('channels', channel, 1)
-    return f'JOIN >> {channel}'
-    """
+    return f'PARTING >> {channel}'

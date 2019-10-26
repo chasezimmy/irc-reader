@@ -5,5 +5,5 @@ add_moonmoon:
 	python manage.py test
 
 tasks:
-	celery -A celery_worker.celery worker --loglevel=info
+	ulimit -n 10000 && celery -A celery_worker.celery worker --loglevel=info --autoscale=1,100
 	

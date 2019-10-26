@@ -17,8 +17,7 @@ scheduler.add_job(refresh_top_channels, trigger='interval', minutes=5)
 scheduler.add_job(remove_5_min)
 scheduler.add_job(remove_5_min, trigger='interval', minutes=1)
 scheduler.add_job(remove_30_min)
-scheduler.add_job(remove_30_min, trigger='interval', minutes=31)
-#scheduler.add_job(join_channel)
+scheduler.add_job(remove_30_min, trigger='interval', minutes=5)
 scheduler.start()
 
 

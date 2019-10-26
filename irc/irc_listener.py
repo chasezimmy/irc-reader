@@ -33,7 +33,7 @@ class IRCListener:
         while self.redis_client.hget('channels', self.channel) == b'1':
             try:
                 
-                data = self.socket_connection.recv(2056).decode('utf-8')
+                data = self.socket_connection.recv(2056).decode('utf-8', 'replace')
                 data_split = re.split(r"[~\r\n]+", data)
                 data = data_split.pop()
                 

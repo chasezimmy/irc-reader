@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, request, jsonify
 from redis_client import redis_client
 
 
@@ -22,3 +22,12 @@ def delete_all():
     redis_client.flushdb()
     return redis_client.hgetall('channels')
 
+
+@irc_routes.route('/shutdown')
+def shutdown():
+    redis_client.delete('channels')
+    func = request.environ.get('werkzeug.server.shutdown')
+    if func is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    func()
+    return jsonify({})
