@@ -24,6 +24,5 @@ scheduler.add_job(remove_expired, trigger='interval', args=('1_hour', 60*60), mi
 
 scheduler.start()
 
-
 if __name__ == '__main__':
     manager.run()

@@ -14,7 +14,7 @@ def refresh_top_channels():
         if n.decode() == '1':
             current_threads.add(k.decode())
 
-    top = top_channels(100)
+    top = top_channels()
 
     to_remove = current_threads.difference(top)
     to_add = top.difference(current_threads)
@@ -25,10 +25,6 @@ def refresh_top_channels():
     print('remove: ', to_remove)
     for channel in to_remove:
         redis_client.hdel('channels', channel)
-
-    print('add: ', to_add)
-    group([join.s(channel) for channel in to_add]).apply_async()
-    
 
 
 def remove_expired(cache, expire_time):
