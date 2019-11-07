@@ -1,8 +1,8 @@
-import json
 import time
+import json
 from celery import group
 from redis_client import redis_client
-from . import join
+from .celery_tasks import join
 from .top_channels import top_channels
 
 
