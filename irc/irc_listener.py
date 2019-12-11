@@ -52,10 +52,10 @@ class IRCListener:
                                 self.redis_client.rpush('5_min', dump)
                                 self.redis_client.rpush('30_min', dump)
                                 self.redis_client.rpush('1_hour', dump)
-                                #self.redis_client.rpush('5_hour', dump)
-                                #self.redis_client.rpush('12_hour', dump)
-                                #self.redis_client.rpush('24_hour', dump)
-                            #self.logger.info(f"{message.get('channel')}: {message.get('spam')}")
+                                # self.redis_client.rpush('5_hour', dump)
+                                # self.redis_client.rpush('12_hour', dump)
+                                # self.redis_client.rpush('24_hour', dump)
+                            # self.logger.info(f"{message.get('channel')}: {message.get('spam')}")
                             
 
             except socket.error:
