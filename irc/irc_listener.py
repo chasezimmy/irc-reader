@@ -2,12 +2,11 @@ import os
 import re
 import json
 import socket
-import redis
 from irc.message import extract_message
 
 
 class IRCListener:
-    def __init__(self, channel, redis_client):
+    def __init__(self, channel, redis_client, logger):
         self.host = "irc.twitch.tv"
         self.port = int(os.environ['PORT'])
         self.irc_channel = f'#{channel}'
@@ -16,6 +15,7 @@ class IRCListener:
         self.oauth = os.environ['OAUTH']
         self.redis_client = redis_client
         self.socket_connection = socket.socket()
+        self.logger = logger
 
         self.run()
 
@@ -55,7 +55,8 @@ class IRCListener:
                                 #self.redis_client.rpush('5_hour', dump)
                                 #self.redis_client.rpush('12_hour', dump)
                                 #self.redis_client.rpush('24_hour', dump)
-                            print(message['spam'])
+                            #self.logger.info(f"{message.get('channel')}: {message.get('spam')}")
+                            
 
             except socket.error:
                 print("Socket died")
